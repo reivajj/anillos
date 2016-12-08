@@ -115,7 +115,7 @@ void MostrarAnillo() {
 	delete a;
 }
 
-void AnillosClonadoPreservaAnterior() {
+/*void AnillosClonadoPreservaAnterior() {
 	Anillo<int>* a = new Anillo<int>();
 	a->agregar(42);
 	a->agregar(20);
@@ -125,8 +125,22 @@ void AnillosClonadoPreservaAnterior() {
 	ASSERT_STR_EQ(to_s(a2), "[42, 20*]");
 	delete a;
     delete a2;
-}
+}*/
 
+void AnillosClonadoPreservaAnterior() {
+    Anillo<int>* a = new Anillo<int>();
+    a->agregar(42);
+    a->agregar(20);
+    a->siguiente();
+    Anillo<int>* a2 = new Anillo<int>(*a);
+    ASSERT_STR_EQ(to_s(a), "[42, 20*]");
+    ASSERT_STR_EQ(to_s(a2), "[42, 20*]");
+    a->eliminar(20);
+    ASSERT_STR_EQ(to_s(a), "[42]");
+    ASSERT_STR_EQ(to_s(a2), "[42, 20*]");
+    delete a;
+    delete a2;
+}
 void PuedeEliminarAnterior() {
 	Anillo<int>* a = new Anillo<int>();
 	a->agregar(10);
@@ -164,17 +178,17 @@ void AnilloDeAnillo(){
 // fin borrar
 
 int main(void) {
-	RUN_TEST(AnilloNuevoEsVacio);
-	RUN_TEST(AnilloUnitarioDaSiguiente);
-	RUN_TEST(MostrarAnilloVacio);
-	RUN_TEST(AnilloUnitarioCicla);
-	RUN_TEST(UltimoEnAgregarEsElSiguiente);
-	RUN_TEST(AnilloConDosCicla);
-	RUN_TEST(AnilloSacaNoSiguiente);
-	RUN_TEST(MostrarAnillo);
-	RUN_TEST(AnillosClonadoPreservaAnterior);
-	RUN_TEST(PuedeEliminarAnterior);
-	RUN_TEST(RetrocederUnaVezRepite);
-	RUN_TEST(AnilloDeAnillo);
+    //RUN_TEST(AnilloNuevoEsVacio);
+    //RUN_TEST(AnilloUnitarioDaSiguiente);
+    //RUN_TEST(MostrarAnilloVacio);
+    //RUN_TEST(AnilloUnitarioCicla);
+    //RUN_TEST(UltimoEnAgregarEsElSiguiente);
+    //RUN_TEST(AnilloConDosCicla);
+    //RUN_TEST(AnilloSacaNoSiguiente);
+    //RUN_TEST(MostrarAnillo);
+    RUN_TEST(AnillosClonadoPreservaAnterior);
+    //RUN_TEST(PuedeEliminarAnterior);
+    //RUN_TEST(RetrocederUnaVezRepite);
+    //RUN_TEST(AnilloDeAnillo);
 	return 0;
 }

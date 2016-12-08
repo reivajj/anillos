@@ -119,9 +119,10 @@ Anillo<T>::Anillo()
         : primero_(NULL), tamanio_(0), anterior_(NULL) {}
 //==================================================================================================
 template <typename T>
-Anillo<T>::Anillo(const Anillo<T>& a) : primero_(NULL), tamanio_(0), anterior_(a.anterior_)
+Anillo<T>::Anillo(const Anillo<T>& a) : primero_(NULL), tamanio_(0), anterior_(NULL)
     {
-
+        //anterior_ = a.anterior_;
+        anterior_ = new Nodo(a.anterior_->dato);
         Nodo* aux = a.primero_;
         Anillo<T> temp;
         int i = 0;
@@ -131,13 +132,13 @@ Anillo<T>::Anillo(const Anillo<T>& a) : primero_(NULL), tamanio_(0), anterior_(a
             i++;
         }
         int tam = a.tamanio_;
-       // Nodo* auxT = temp.primero_;
+        Nodo* auxT = temp.primero_;
         while(tam > 0){
-            //this->agregar(auxT->dato);
-            //auxT = auxT->siguiente;
-            //tam--;
-            agregar(temp.primero_->dato);
-            temp.eliminar(temp.primero_->dato);
+            this->agregar(auxT->dato);
+            auxT = auxT->siguiente;
+            //agregar(temp.primero_->dato);
+            //temp.eliminar(temp.primero_->dato);
+            // no va por que el compilador llama al destructor y lo elimina...
             tam--;
         }
     }
@@ -147,7 +148,6 @@ Anillo<T>::~Anillo(){
     //delete anterior_;
     Nodo* aux = primero_;
     if(primero_ == NULL) {
-        delete primero_;
         return;
     }
     int i = 0;
@@ -159,7 +159,8 @@ Anillo<T>::~Anillo(){
         eliminar(aux1->dato);
     }
     tamanio_ = 0;
-    primero_ = NULL;
+    //primero_ = NULL;
+    //anterior_ = NULL;
 }
 //==================================================================================================
 template <typename T>
@@ -227,11 +228,11 @@ void Anillo<T>::eliminar(const T& elem){
     }
     if(tamanio_ == 1){
         if(aux->dato == elem){
-            if(aux == anterior_) anterior_ = NULL;
+            if(aux != NULL && anterior_ != NULL && aux->dato == anterior_->dato) anterior_ = NULL;
             delete aux;
             aux = NULL;
             eliminado = true;
-            primero_ = NULL;
+            //primero_ = NULL;
             tamanio_--;
         }
         return;
@@ -241,8 +242,12 @@ void Anillo<T>::eliminar(const T& elem){
         if(anteriorAlTarget == NULL) return;
         Nodo* siguienteAlTarget = anteriorAlTarget->siguiente->siguiente;
         Nodo* target = anteriorAlTarget->siguiente;
-        if(target == primero_) primero_ = siguienteAlTarget;
-        if(target == anterior_) anterior_ = NULL;
+        if(target == primero_){
+            primero_ = siguienteAlTarget;
+        }
+        if(target == anterior_){
+            anterior_ = NULL;
+        }
         delete target;
         target = NULL;
         eliminado = true;
@@ -309,14 +314,17 @@ template <typename T>
 bool Anillo<T>::operator==(const Anillo<T>& otro) const{
     bool iguales = true;
     if(tamanio_ != otro.tamanio()) return false;
+    if(anterior_ != otro.anterior_) return false;
 
     Nodo* aux = primero_;
     Nodo* aux1 = otro.primero_;
-
-    for(int i = 0; i < tamanio_; aux->siguiente){
+    int i = 0;
+    while(i < tamanio_){
         if(aux != aux1) return false;
         aux1 = aux1->siguiente;
+        i++;
     }
+    return iguales;
 }
 
 template<class T>
